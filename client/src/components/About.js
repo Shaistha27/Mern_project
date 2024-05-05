@@ -1,10 +1,53 @@
-import React from "react";
-import girl1 from "../images/girl1.jpeg";
+import React, { useEffect, useState } from "react";
+// import girl1 from "../images/girl1.jpeg";
+import { useNavigate } from "react-router-dom";
+
 const About = () => {
+  const navigate = useNavigate();
+
+  const [userData, setUserData] = useState(null);
+
+  const callAboutPage = async () => {
+    try {
+      const res = await fetch("/about", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        // cookies will reach backend
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const error = new Error(res.error);
+        throw error;
+      }
+      const data = await res.json();
+
+      setUserData(data);
+    } catch (error) {
+      console.log("Error caught:", error);
+      navigate("/login");
+    }
+  };
+  useEffect(() => {
+    callAboutPage();
+  }, []);
+
   return (
     <>
-      <div className="container emp-profile">
-        <form method="">
+      {userData && (
+        <div>
+          <div>Name: {userData.name}</div>
+          <div>Email: {userData.email}</div>
+          <div>Work: {userData.work}</div>
+          <div>Phone: {userData.phone}</div>
+        </div>
+      )}
+
+      {/* <div className="container emp-profile">
+        <form method="GET">
           <div className="row">
             <div className="col-md-4">
               <img src={girl1} alt="girl" />
@@ -211,7 +254,7 @@ const About = () => {
             </div>
           </div>
         </form>
-      </div>
+      </div> */}
     </>
   );
 };

@@ -78,7 +78,7 @@ const Login = () => {
           type="submit"
           className="btn btn-primary"
           value="Log in"
-          // onSubmit={LoginUser}
+          onSubmit={LoginUser}
         >
           Log In
         </button>

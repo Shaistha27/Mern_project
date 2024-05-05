@@ -37,7 +37,7 @@ app.get("/contact", (req, res) => {
 app.get("/signin", (req, res) => {
   res.send("This is Login Page!");
 });
-app.get("/signup", (req, res) => {
+app.get("/register", (req, res) => {
   res.send("This is Registration Page!");
 });
 

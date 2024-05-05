@@ -3,8 +3,11 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const authenticate = require("../middleware/authenticate.js");
-// require("../db/conn.js"); this line is throwing an error
+// require("../db/conn.js");
+// this line is throwing an error
 const User = require("../models/user_schema.js");
+const cookieParser = require("cookie-parser");
+router.use(cookieParser());
 router.get("/", (req, res) => {
   res.send("This is Home Page of router!");
 });
@@ -14,14 +17,53 @@ router.get("/", (req, res) => {
 // res.json({ message: req.body });
 
 // using promises
-// router.post("/register", (req, res) => {
+router.post("/register", (req, res) => {
+  const { name, email, work, phone, password, cpassword } = req.body;
+  if (!name || !email || !work || !phone || !password || !cpassword) {
+    return res.status(422).json({ error: "Please fill all fields" });
+  }
+  User.findOne({ email: email })
+    .then((userExist) => {
+      if (userExist) {
+        return res.status(422).json({ error: "Email already exists" });
+      } else {
+        const user = new User({
+          name,
+          email,
+          phone,
+          work,
+          password,
+          cpassword,
+        });
+        user
+          .save()
+          .then(() => {
+            res.status(201).json({ msg: "Data entered successfully" });
+          })
+          .catch((err) => {
+            console.error("Error saving user:", err);
+            res.status(500).json({ error: "Error saving user data" });
+          });
+      }
+    })
+    .catch((err) => {
+      console.error("Error finding user:", err);
+      res.status(500).json({ error: "Server error" });
+    });
+});
+
+// using async await
+// router.post("/register", async (req, res) => {
 //   const { name, email, work, phone, password, cpassword } = req.body;
+//   console.log(name, email, work, phone, password, cpassword);
 //   if (!name || !email || !work || !phone || !password || !cpassword) {
 //     return res.status(422).json({ error: "please fill all fields" });
 //   }
-// User.findOne({ email: email })
-//   .then((userExist) => {
+//   try {
+//     const userExist = await User.findOne({ email: email });
 //     if (userExist) {
+//       return res.status(422).json({ error: "Email already exists" });
+//     } else if (password != cpassword) {
 //       return res.status(422).json({ error: "Email already exists" });
 //     } else {
 //       const user = new User({
@@ -32,52 +74,18 @@ router.get("/", (req, res) => {
 //         password,
 //         cpassword,
 //       });
-//       user
-//         .save()
-//         .then(() => {
-//           res.status(201).json({ msg: "data entered successfully" });
-//         })
-//         .catch((err) => {
-//           res.status(500).json({ msg: "error occured" });
-//         });
-//     }
-//   })
-//   .catch((err) => {
-//     res.status(500).json({ msg: "server error" });
-//   });
-// using async await
-router.post("/register", async (req, res) => {
-  const { name, email, work, phone, password, cpassword } = req.body;
-  if (!name || !email || !work || !phone || !password || !cpassword) {
-    return res.status(422).json({ error: "please fill all fields" });
-  }
-  try {
-    const userExist = await User.findOne({ email: email });
-    if (userExist) {
-      return res.status(422).json({ error: "Email already exists" });
-    } else if (password != cpassword) {
-      return res.status(422).json({ error: "Email already exists" });
-    } else {
-      const user = new User({
-        name,
-        email,
-        phone,
-        work,
-        password,
-        cpassword,
-      });
 
-      const userRegister = await user.save();
-      if (userRegister) {
-        res.status(201).json({ msg: "data entered successfully" });
-      } else {
-        res.status(500).json({ msg: "Failed to register" });
-      }
-    }
-  } catch (err) {
-    res.status(500).json({ msg: "server error" });
-  }
-});
+//       const userRegister = await user.save();
+//       if (userRegister) {
+//         res.status(201).json({ msg: "data entered successfully" });
+//       } else {
+//         res.status(500).json({ msg: "Failed to register" });
+//       }
+//     }
+//   } catch (err) {
+//     res.status(500).json({ msg: "server error" });
+//   }
+// });
 // login route
 router.post("/signin", async (req, res) => {
   try {
@@ -98,9 +106,9 @@ router.post("/signin", async (req, res) => {
         expires: new Date(Date.now() + 25892000000),
         httpOnly: true,
       });
-      // console.log("Input password:", password);
-      // console.log("Stored hashed password:", userLogin.password);
-      // console.log("isMatch:", isMatch);
+      console.log("Input password:", password);
+      console.log("Stored hashed password:", userLogin.password);
+      console.log("isMatch:", isMatch);
       if (isMatch) {
         res.json({ message: "User signin successful" });
       } else {
@@ -115,8 +123,19 @@ router.post("/signin", async (req, res) => {
 });
 
 // dynamic about us page
+
 router.get("/about", authenticate, (req, res) => {
-  console.log("About");
-  res.send("This is About Page!");
+  // console.log("About");
+  res.send(req.rootUser);
+});
+
+router.get("/getData", authenticate, (req, res) => {
+  res.json(req.rootUser);
+  // console.log(req.rootUser.name);
+});
+router.get("/logout", (req, res) => {
+  console.log("Logout Page");
+  res.clearCookie("jwttoken", { path: "/" });
+  res.status(200).send("User logged out");
 });
 module.exports = router;

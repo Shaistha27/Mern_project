@@ -53,8 +53,9 @@ function Contact() {
           </div>
         </div>
       </div>
+
       <div className="container">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} action="" method="post">
           <div className="mb-3">
             <label htmlFor="name">Name:</label>
             <input

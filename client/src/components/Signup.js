@@ -1,46 +1,61 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import "./Signup.css";
 const Signup = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState({
     name: "",
     email: "",
     phone: "",
-    profession: "",
+    work: "",
     password: "",
     cpassword: "",
   });
-  let name, value;
+
   const handleInputs = (e) => {
-    console.log(e);
-    name = e.target.name;
-    value = e.target.value;
-    setUser({ ...user, [name]: value });
+    setUser((prevUser) => ({
+      ...prevUser,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const PostData = async (element) => {
     element.preventDefault();
     const { name, email, work, phone, password, cpassword } = user;
-    const res = await fetch("/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, work, phone, password, cpassword }),
-    });
-    const data = await res.json();
-    if (data.status === 422) {
-      window.alert("Invalid Registeration");
-      console.log("Invalid Registeration");
-    } else {
-      window.alert("Registeration successful");
-      console.log("Registeration successful");
+    console.log(name, email, work, phone, password, cpassword);
+    try {
+      const res = await fetch("/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+      });
+      const data = await res.json();
+      console.log(data);
+      console.log(data.msg);
+      // if (data.status === 422) {
+      //   window.alert("Invalid Registeration");
+      //   console.log("Invalid Registeration");
+      // } else {
+      //   window.alert("Registeration successful");
+      //   console.log("Registeration successful");
 
-      navigate("/login");
+      // }
+      if (res.ok) {
+        alert(data.msg);
+        // Redirect user to login page or do something else
+        navigate("/login");
+      } else {
+        alert(data.error);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
     }
   };
   return (
     <>
-      <form className="container" method="POST">
-        <h2>Sign up</h2>
+      <form className="container" method="POST" onSubmit={PostData}>
+        <h2 className="heading">Sign up</h2>
         <div className="mb-3">
           <label className="form-label">Name</label>
           <input
@@ -68,7 +83,7 @@ const Signup = () => {
           />
 
           <div id="emailHelp" className="form-text">
-            We'll never share your email with anyone else.
+            We'll never share your email with anyone else...
           </div>
         </div>
         <div className="mb-3">
@@ -84,7 +99,7 @@ const Signup = () => {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Profession</label>
+          <label className="form-label">work</label>
           <input
             type="text"
             className="form-control"
@@ -101,7 +116,7 @@ const Signup = () => {
           <input
             type="password"
             className="form-control"
-            id="exampleInputPassword1"
+            id="exampleInputPassword"
             placeholder="Your password"
             name="password"
             value={user.password}
@@ -123,7 +138,7 @@ const Signup = () => {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary" onClick={PostData}>
+        <button type="submit" className="btn btn-primary">
           Register
         </button>
       </form>
