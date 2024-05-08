@@ -1,0 +1,18 @@
+@media screen and (max-width: 600px) {
+  .notfound h1 {
+    font-size: 180px;
+  }
+}
+
+.notfound {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+h1 {
+  font-weight: 700;
+  color: #150048;
+  font-size: 280px;
+  text-shadow: 3px 3px 5px #443860c7;
+}

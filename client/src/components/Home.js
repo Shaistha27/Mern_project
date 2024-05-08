@@ -38,24 +38,24 @@ const Home = () => {
 
 export default Home;
 
-// components/Home.js
+// // components/Home.js
 
-// import React from "react";
+// // import React from "react";
 
-// const Home = ({ isLoggedIn, username }) => {
-//   return (
-//     <div>
-//       {isLoggedIn ? (
-//         <div>
-//           <p>Welcome, {username}!</p>
-//           {/* Add logout button here */}
-//           <button>logout</button>
-//         </div>
-//       ) : (
-//         <p>Please log in to access the home page.</p>
-//       )}
-//     </div>
-//   );
-// };
+// // const Home = ({ isLoggedIn, username }) => {
+// //   return (
+// //     <div>
+// //       {isLoggedIn ? (
+// //         <div>
+// //           <p>Welcome, {username}!</p>
+// //           {/* Add logout button here */}
+// //           <button>logout</button>
+// //         </div>
+// //       ) : (
+// //         <p>Please log in to access the home page.</p>
+// //       )}
+// //     </div>
+// //   );
+// // };
 
-// export default Home;
+// // export default Home;

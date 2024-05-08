@@ -41,7 +41,6 @@ const About = () => {
         <div>
           <div>Name: {userData.name}</div>
           <div>Email: {userData.email}</div>
-          <div>Work: {userData.work}</div>
           <div>Phone: {userData.phone}</div>
         </div>
       )}

@@ -34,22 +34,42 @@
 
 // export default Logout;
 
-import React, { useEffect } from "react";
+// 2
 
-import { useNavigate } from "react-router-dom";
+// import React, { useEffect } from "react";
 
-const Logout = ({ history }) => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    const logout = async () => {
-      // Logout logic
-      navigate("/login"); // Navigate to login page
-    };
+// import { useNavigate } from "react-router-dom";
 
-    logout();
-  }, [navigate]);
+// const Logout = ({ history }) => {
+//   const navigate = useNavigate();
+//   useEffect(() => {
+//     const logout = async () => {
+//       // Logout logic
+//       navigate("/login"); // Navigate to login page
+//     };
 
-  return <div>Logging out...</div>;
+//     logout();
+//   }, [navigate]);
+
+//   return <div>Logging out...</div>;
+// };
+
+// export default Logout;
+import { useAuth0 } from "@auth0/auth0-react";
+import React from "react";
+
+const LogoutButton = () => {
+  const { logout } = useAuth0();
+
+  return (
+    <button
+      onClick={() =>
+        logout({ logoutParams: { returnTo: window.location.origin } })
+      }
+    >
+      Log Out
+    </button>
+  );
 };
 
-export default Logout;
+export default LogoutButton;

@@ -18,8 +18,8 @@ router.get("/", (req, res) => {
 
 // using promises
 router.post("/register", (req, res) => {
-  const { name, email, work, phone, password, cpassword } = req.body;
-  if (!name || !email || !work || !phone || !password || !cpassword) {
+  const { name, email, phone, password, cpassword } = req.body;
+  if (!name || !email || !phone || !password || !cpassword) {
     return res.status(422).json({ error: "Please fill all fields" });
   }
   User.findOne({ email: email })
@@ -31,7 +31,6 @@ router.post("/register", (req, res) => {
           name,
           email,
           phone,
-          work,
           password,
           cpassword,
         });
