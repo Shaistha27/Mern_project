@@ -98,7 +98,7 @@ router.post("/signin", async (req, res) => {
     if (userLogin) {
       const isMatch = await bcrypt.compare(password, userLogin.password);
 
-      const token = await userLogin.generateAuthToken();
+      const token = await userLogin.generateToken();
       console.log(token);
 
       res.cookie("jwtoken", token, {
@@ -109,7 +109,11 @@ router.post("/signin", async (req, res) => {
       console.log("Stored hashed password:", userLogin.password);
       console.log("isMatch:", isMatch);
       if (isMatch) {
-        res.json({ message: "User signin successful" });
+        res.json({
+          message: "User signin successful",
+          token: await userLogin.generateToken(),
+          userId: userLogin._id.toString(),
+        });
       } else {
         res.status(400).json({ error: "Invalid Credentials" });
       }
@@ -132,9 +136,9 @@ router.get("/getData", authenticate, (req, res) => {
   res.json(req.rootUser);
   // console.log(req.rootUser.name);
 });
-router.get("/logout", (req, res) => {
-  console.log("Logout Page");
-  res.clearCookie("jwttoken", { path: "/" });
-  res.status(200).send("User logged out");
-});
+// router.get("/logout", (req, res) => {
+//   console.log("Logout Page");
+//   res.clearCookie("jwttoken", { path: "/" });
+//   res.status(200).send("User logged out");
+// });
 module.exports = router;

@@ -36,40 +36,17 @@
 
 // 2
 
-// import React, { useEffect } from "react";
+import React, { useEffect } from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "./utils/AuthProvider.js";
 
-// import { useNavigate } from "react-router-dom";
+export const Logout = () => {
+  const { LogoutUser } = useAuth();
+  useEffect(() => {
+    LogoutUser();
+  }, [LogoutUser]);
 
-// const Logout = ({ history }) => {
-//   const navigate = useNavigate();
-//   useEffect(() => {
-//     const logout = async () => {
-//       // Logout logic
-//       navigate("/login"); // Navigate to login page
-//     };
-
-//     logout();
-//   }, [navigate]);
-
-//   return <div>Logging out...</div>;
-// };
-
-// export default Logout;
-import { useAuth0 } from "@auth0/auth0-react";
-import React from "react";
-
-const LogoutButton = () => {
-  const { logout } = useAuth0();
-
-  return (
-    <button
-      onClick={() =>
-        logout({ logoutParams: { returnTo: window.location.origin } })
-      }
-    >
-      Log Out
-    </button>
-  );
+  return <Navigate to={"/login"} />;
 };
 
-export default LogoutButton;
+export default Logout;

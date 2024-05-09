@@ -1,7 +1,10 @@
 import React from "react";
 // import "bootstrap/dist/css/bootstrap.css";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "./utils/AuthProvider";
+
 const Navbar = () => {
+  const { isLoggedIn } = useAuth();
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -37,21 +40,27 @@ const Navbar = () => {
                   Contact
                 </NavLink>
               </li>
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/login">
-                  Login
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/signup">
-                  Registeration
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/logout">
-                  Logout
-                </NavLink>
-              </li>
+
+              {isLoggedIn ? (
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/logout">
+                    Logout
+                  </NavLink>
+                </li>
+              ) : (
+                <>
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/login">
+                      Login
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/signup">
+                      Registeration
+                    </NavLink>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </div>

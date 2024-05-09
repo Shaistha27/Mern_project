@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "./utils/AuthProvider.js";
 
 const Home = () => {
   const [username, setUsername] = useState("");
+  const { isLoggedIn } = useAuth();
 
   const callHomePage = async () => {
     try {
@@ -29,8 +31,13 @@ const Home = () => {
     <div className="home-page container">
       <div className="home-div">
         <p className="pt-5">Welcome</p>
-        <h1> {username}</h1>
-        <h1>It is a MERN project</h1>
+        {isLoggedIn ? (
+          <h1> {username}</h1>
+        ) : (
+          <h5> Please log in to access the home page. </h5>
+        )}
+
+        <h5>It is a MERN project</h5>
       </div>
     </div>
   );
