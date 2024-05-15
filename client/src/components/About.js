@@ -1,56 +1,31 @@
-import React, { useEffect, useState } from "react";
-// import girl1 from "../images/girl1.jpeg";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "./utils/AuthProvider.js";
+import React from "react";
+import "./About.css";
+import about from "../assets/about.jpg";
 
 const About = () => {
-  const navigate = useNavigate();
-  const { isLoggedIn } = useAuth();
-  const [userData, setUserData] = useState(null);
-
-  const callAboutPage = async () => {
-    try {
-      const res = await fetch("/about", {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        // cookies will reach backend
-        credentials: "include",
-      });
-
-      if (!res.ok) {
-        const error = new Error(res.error);
-        throw error;
-      }
-      const data = await res.json();
-
-      setUserData(data);
-    } catch (error) {
-      console.log("Error caught:", error);
-      navigate("/login");
-    }
-  };
-  useEffect(() => {
-    callAboutPage();
-  }, []);
-
   return (
-    <>
-      <h4>My About Page</h4>
-      {isLoggedIn ? (
-        userData && (
-          <div>
-            <div>Name: {userData.name}</div>
-            <div>Email: {userData.email}</div>
-            <div>Phone: {userData.phone}</div>
-          </div>
-        )
-      ) : (
-        <h5>Please Log in to access the About page</h5>
-      )}
-    </>
+    <div className="about" id="about">
+      <div className="about-left">
+        <img src={about} className=" about-img" alt="about-img" />
+      </div>
+      <div className="about-right">
+        <h2 className="aboutChild1">Nuturing tommorow leaders today</h2>
+        <p className="aboutChild2">
+          Welcome to our nurturing learning environment, where we dedicate
+          ourselves to offering outstanding services for various courses. Our
+          goal is to create an authentic, welcoming atmosphere, making you feel
+          at ease as you discover our diverse resources. <br /> As you explore
+          our website, experience the warmth of our sincere approach, which puts
+          your needs first and helps build a connection that will support your
+          path to personal growth and success.
+          <br /> Our commitment to excellence is evident in the wide range of
+          courses we provide, catering to diverse interests and skill levels.
+          Our team of dedicated professionals is always ready to assist and
+          guide you, ensuring your journey towards self-improvement is both
+          enjoyable and fruitful.
+        </p>
+      </div>
+    </div>
   );
 };
 

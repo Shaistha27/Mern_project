@@ -1,108 +1,106 @@
-import React, { useState } from "react";
+import React from "react";
+import "./Contact.css";
 
-function Contact() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
+const Contact = () => {
+  const [result, setResult] = React.useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    setResult("Sending....");
+    const formData = new FormData(event.target);
+
+    formData.append("access_key", "fd4088a3-9b9a-437d-b906-354c6c9ef816");
+
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      setResult("Form Submitted Successfully");
+      event.target.reset();
+    } else {
+      console.log("Error", data);
+      setResult(data.message);
+    }
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // You can process or send the form data here
-    console.log(formData); // For example, logging the form data
-    // Add code to send form data to a backend or perform any other action here
-  };
-
   return (
-    <>
-      <div className="contact_info">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-lg-10 offset-lg-1 d-flex justify-content-between ">
-              <div className="contact_info_item">
-                <div className="contact_info_content">
-                  <div className="contact_info_title">Phone</div>
-                  <div className="contact_info_text">+91 9876543210</div>
-                </div>
-              </div>
-              <div className="Email_info_item">
-                <div className="Email_info_content">
-                  <div className="Email_info_title">Email</div>
-                  <div className="Email_info_text">Contact@shaistha.com</div>
-                </div>
-              </div>
-              <div className="Address_info_item">
-                <div className="Address_info_content">
-                  <div className="Address_info_title">Address</div>
-                  <div className="Address_info_text">
-                    Hyderabad, Telangana, India
-                  </div>
-                </div>
-              </div>
-            </div>
+    <div id="contact">
+      <h2>Get in touch</h2>
+      <div className="contact">
+        <div className="contact-col">
+          <h3>We're here to help you!</h3>
+          <p>
+            Our team is dedicated to providing exceptional service and support.
+            Whether you have inquiries about our programs, need assistance with
+            enrollment, or have any other questions, don't hesitate to reach
+            out. We're here to help you every step of the way!
+          </p>
+          <div className="adminInfo">
+            <ul>
+              <li>
+                <i
+                  className="fa-solid fa-envelope fa-lg"
+                  style={{ marginRight: "4px" }}
+                ></i>
+                contact@PMahaboobSana.com
+              </li>
+              <li>
+                <i
+                  className="fa-solid fa-phone fa-lg"
+                  style={{ marginRight: "4px" }}
+                ></i>
+                +12345665
+              </li>
+              <li>
+                {" "}
+                <i
+                  className="fa-solid fa-location-dot fa-lg"
+                  style={{ marginRight: "4px" }}
+                ></i>
+                banjara hills <br /> jublee hills
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
-
-      <div className="container">
-        <form onSubmit={handleSubmit} action="" method="post">
-          <div className="mb-3">
-            <label htmlFor="name">Name:</label>
+        <div className="contact-col">
+          <form onSubmit={onSubmit}>
+            <label>Your Name</label>
             <input
               type="text"
-              id="name"
               name="name"
-              value={formData.name}
-              onChange={handleChange}
+              placeholder="Enter Your Name"
               required
             />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="email">Email:</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="phone">Phone No.:</label>
+            <label>Phone No.</label>
             <input
               type="tel"
-              id="phone"
               name="phone"
-              value={formData.phone}
-              onChange={handleChange}
+              placeholder="Enter Your mobile no"
+              required
             />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="message">Message:</label>
+            <label>Write your message here</label>
             <textarea
-              id="message"
               name="message"
-              value={formData.message}
-              onChange={handleChange}
+              id=""
+              cols="30"
+              rows="6"
+              placeholder="enter your message"
               required
             ></textarea>
-          </div>
-          <button type="submit">Send</button>
-        </form>
+
+            <button type="submit" className="btn" color="#212EA0">
+              Submit now
+              {/* <img src={program_1} alt="white_arow" /> */}
+            </button>
+          </form>
+          <span>{result}</span>
+        </div>
       </div>
-    </>
+    </div>
   );
-}
+};
 
 export default Contact;

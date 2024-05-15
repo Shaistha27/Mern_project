@@ -3,9 +3,12 @@ const app = express();
 const bodyparser = require("body-parser");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
 const User = require("./models/user_schema.js");
-
+const paymentRouter = require("./router/auth.js");
+const cartRoutes = require("./router/cart");
 app.use(express.json());
+app.use(cookieParser());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 app.use(require("./router/auth"));
@@ -25,15 +28,7 @@ require("./db/conn.js");
 //   console.log("About");
 //   res.send("This is About Page!");
 // });
-app.get("/contact", (req, res) => {
-  res.cookie("Test", "thapa", {
-    domain: "yourdomain.com", // Replace with your domain
-    path: "/contact", // Replace with the path you're setting the cookie for
-    secure: true, // Set this if your site uses HTTPS
-    sameSite: "strict", // You can set 'strict', 'lax', or 'none' based on your requirements
-  });
-  res.send("This is Contact Page!");
-});
+
 app.get("/signin", (req, res) => {
   res.send("This is Login Page!");
 });
@@ -41,6 +36,18 @@ app.get("/register", (req, res) => {
   res.send("This is Registration Page!");
 });
 
+app.use("/api/cart", cartRoutes);
+
+app.use("/payment", paymentRouter);
+
+// Simple routes for success and cancel pages
+app.get("/success", (req, res) => {
+  res.send("Payment successful!");
+});
+
+app.get("/cancel", (req, res) => {
+  res.send("Payment canceled!");
+});
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });

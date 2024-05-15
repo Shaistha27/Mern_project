@@ -1,0 +1,27 @@
+.carousel-item {
+  text-align: center;
+}
+#carouselExample {
+  margin: 60px;
+  padding: 20px;
+  color: #150048;
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+}
+.carousel-control-prev {
+  color: #150048;
+}
+
+.carousel-inner {
+  font-size: 20px;
+  width: 60vw;
+  margin-left: 150px;
+}
+.pbtn .carousel-control-prev-icon,
+.arrow {
+  color: black !important; /* Change arrow color */
+}
+.nextArrow,
+.prevArrow {
+  color: #150048;
+}

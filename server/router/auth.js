@@ -2,11 +2,17 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const stripe = require("stripe")(
+  "sk_test_51PGDQKSEBnF3Dk586BtP7lK9d7rIn0oNwI6y2JOmSYbzub2uvuqz9DxZM8jStkDfRo4zdJ6aOknlmApYMWplUYjb00UY0rfxTw"
+);
+
 const authenticate = require("../middleware/authenticate.js");
 // require("../db/conn.js");
 // this line is throwing an error
 const User = require("../models/user_schema.js");
 const cookieParser = require("cookie-parser");
+const { model } = require("mongoose");
+
 router.use(cookieParser());
 router.get("/", (req, res) => {
   res.send("This is Home Page of router!");
@@ -127,7 +133,7 @@ router.post("/signin", async (req, res) => {
 
 // dynamic about us page
 
-router.get("/about", authenticate, (req, res) => {
+router.get("/profile", authenticate, (req, res) => {
   // console.log("About");
   res.send(req.rootUser);
 });
@@ -141,4 +147,79 @@ router.get("/getData", authenticate, (req, res) => {
 //   res.clearCookie("jwttoken", { path: "/" });
 //   res.status(200).send("User logged out");
 // });
+
+// payment gateway
+
+// router.post("/payment", async (req, res) => {
+//   try {
+//     const product = await stripe.products.create({
+//       name: "cloud-computing",
+//     });
+
+//     if (!product) {
+//       return res.status(500).send({ error: "Product creation failed" });
+//     }
+
+//     const price = await stripe.prices.create({
+//       product: product.id,
+//       unit_amount: 100 * 100, // assuming this is in the smallest currency unit (cents for USD)
+//       currency: "inr",
+//     });
+
+//     if (!price) {
+//       return res.status(500).send({ error: "Price creation failed" });
+//     }
+
+//     const session = await stripe.checkout.sessions.create({
+//       line_items: [
+//         {
+//           price: price.id,
+//           quantity: 1,
+//         },
+//       ],
+//       mode: "payment",
+//       success_url: `${req.protocol}://${req.get("host")}/success`,
+//       cancel_url: `${req.protocol}://${req.get("host")}/cancel`,
+//       customer_email: "demo@example.com",
+//     });
+
+//     if (!session) {
+//       return res.status(500).send({ error: "Session creation failed" });
+//     }
+
+//     res.status(200).send({ sessionId: session.id });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send({ error: "Internal Server Error" });
+//   }
+// });
+router.post("/add-to-cart", authenticate, async (req, res) => {
+  const { productId, quantity } = req.body;
+  const userId = req.user._id;
+
+  try {
+    const user = await User.findById(userId);
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const cartItem = user.cart.find(
+      (item) => item.productId.toString() === productId
+    );
+
+    if (cartItem) {
+      cartItem.quantity += quantity;
+    } else {
+      user.cart.push({ productId, quantity });
+    }
+
+    await user.save();
+
+    res.status(200).json({ message: "Product added to cart" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 module.exports = router;
