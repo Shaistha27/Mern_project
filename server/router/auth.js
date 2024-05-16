@@ -2,14 +2,12 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const stripe = require("stripe")(
-  "sk_test_51PGDQKSEBnF3Dk586BtP7lK9d7rIn0oNwI6y2JOmSYbzub2uvuqz9DxZM8jStkDfRo4zdJ6aOknlmApYMWplUYjb00UY0rfxTw"
-);
+const stripe = require("stripe")(process.env.Skey);
 
 const authenticate = require("../middleware/authenticate.js");
 // require("../db/conn.js");
 // this line is throwing an error
-const User = require("../models/user_schema.js");
+const User = require("../models/user.models.js");
 const cookieParser = require("cookie-parser");
 const { model } = require("mongoose");
 

@@ -1,4 +1,4 @@
-h2 {
+/* h2 {
   color: #150048;
   display: flex;
   justify-content: center;
@@ -28,4 +28,8 @@ h2 {
 }
 .grandParent {
   margin-top: 98px;
+} */
+
+form {
+  margin-top: 200px;
 }

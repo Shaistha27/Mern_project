@@ -23,5 +23,9 @@
 }
 .nextArrow,
 .prevArrow {
+  margin-top: 100px;
   color: #150048;
+}
+h2 {
+  margin-left: 500px;
 }

@@ -11,7 +11,9 @@ import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import Programs from "./components/Programs.js";
 import Product from "./components/Product.js";
-
+import VideoUpload from "./components/VideoUpload/VideoUpload.js";
+import VideoList from "./components/VideoList/VideoList.js";
+import Admin from "./components/Admin.jsx";
 const App = () => {
   return (
     <>
@@ -27,6 +29,9 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/videoUpload" element={<VideoUpload />} />
+        <Route path="/dashboard" element={<Admin />} />
+        <Route path="/videoList" element={<VideoList />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </>

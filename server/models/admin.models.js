@@ -1,49 +1,27 @@
+// Admin model
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const userSchema = new mongoose.Schema({
+
+const AdminSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   email: {
     type: String,
     required: true,
-  },
-  phone: {
-    type: Number,
-    required: true,
+    unique: true,
   },
   password: {
     type: String,
     required: true,
   },
-  cpassword: {
-    type: String,
-    required: true,
-  },
-
-  tokens: [
-    {
-      token: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
-  cart: [
-    {
-      productId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
-      },
-      quantity: Number,
-    },
-  ],
 });
 
 // password hashing
-userSchema.pre("save", async function (next) {
+AdminSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     try {
       const hashedPassword = await bcrypt.hash(this.password, 12);
@@ -55,8 +33,8 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// we are generating tokens
-userSchema.methods.generateToken = async function () {
+// generating tokens
+AdminSchema.methods.generateAuthToken = async function () {
   try {
     let token = jwt.sign({ _id: this._id }, process.env.SECRET_KEY);
     this.tokens = this.tokens.concat({ token: token });
@@ -66,5 +44,6 @@ userSchema.methods.generateToken = async function () {
     console.error(err);
   }
 };
-const User = mongoose.model("USER", userSchema);
-module.exports = User;
+
+const Admin = mongoose.model("Admin", AdminSchema);
+module.exports = Admin;
