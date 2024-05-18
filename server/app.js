@@ -97,15 +97,6 @@ app.use("/sign-upload", signUploadRoutes);
 const PORT = process.env.PORT || 3001;
 require("./db/conn.js");
 
-app.get("/contact", (req, res) => {
-  res.cookie("Test", "thapa", {
-    domain: "yourdomain.com",
-    path: "/contact",
-    secure: true,
-    sameSite: "strict",
-  });
-  res.send("This is Contact Page!");
-});
 app.get("/signin", (req, res) => {
   res.send("This is Login Page!");
 });

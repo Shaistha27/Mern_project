@@ -13,7 +13,9 @@ import Programs from "./components/Programs.js";
 import Product from "./components/Product.js";
 import VideoUpload from "./components/VideoUpload/VideoUpload.js";
 import VideoList from "./components/VideoList/VideoList.js";
-import Admin from "./components/Admin.jsx";
+import Admin from "./components/Admin.js";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
 const App = () => {
   return (
     <>
@@ -22,7 +24,7 @@ const App = () => {
       <Routes>
         {/* <Route path="/" element={<Navbar />} /> */}
         <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
+        {/* <Route path="/profile" element={<Profile />} /> */}
         <Route path="/programs" element={<Programs />} />
         <Route path="/add-to-cart" element={<Product />} />
         <Route path="/contact" element={<Contact />} />

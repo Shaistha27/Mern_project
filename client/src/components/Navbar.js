@@ -25,26 +25,26 @@ const Navbar = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const profileName = async () => {
-      try {
-        const res = await fetch("/profile", {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        });
+  // useEffect(() => {
+  //   const profileName = async () => {
+  //     try {
+  //       const res = await fetch("/profile", {
+  //         method: "GET",
+  //         headers: {
+  //           Accept: "application/json",
+  //           "Content-Type": "application/json",
+  //         },
+  //       });
 
-        const data = await res.json();
-        setUsername(data.name);
-      } catch (error) {
-        console.error("Error caught:", error);
-      }
-    };
+  //       const data = await res.json();
+  //       setUsername(data.name);
+  //     } catch (error) {
+  //       console.error("Error caught:", error);
+  //     }
+  //   };
 
-    profileName();
-  }, []);
+  //   profileName();
+  // }, []);
 
   const toggleMenu = () => {
     setMobileMenu((prevState) => !prevState);
@@ -56,12 +56,19 @@ const Navbar = () => {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
-  const isProfilePage = location.pathname === "/profile";
-  const isSignInPage = location.pathname === "/login";
-  const isSignUpPage = location.pathname === "/signup";
+  // const isProfilePage = location.pathname === "/profile";
+  // const isSignInPage = location.pathname === "/login";
+  // const isSignUpPage = location.pathname === "/signup";
+  // const isDashboard = location.pathname === "/dashboard";
+  const isHome = location.pathname === "/";
 
+  // const navbarClass = `container ${sticky ? "dark-nav" : ""} ${
+  //   isProfilePage || isSignInPage || isSignUpPage || isDashboard
+  //     ? "dark-nav"
+  //     : ""
+  // }`;
   const navbarClass = `container ${sticky ? "dark-nav" : ""} ${
-    isProfilePage || isSignInPage || isSignUpPage ? "dark-nav" : ""
+    isHome ? "" : "dark-nav"
   }`;
 
   return (
@@ -94,7 +101,7 @@ const Navbar = () => {
               </NavLink>
             </li>
 
-            {isLoggedIn ? (
+            {/* {isLoggedIn ? (
               <li className="nav-item profile">
                 <NavLink to="/profile">
                   <img
@@ -120,7 +127,7 @@ const Navbar = () => {
                   Profile
                 </NavLink>
               </li>
-            )}
+            )} */}
             <li className="nav-item">
               <NavLink
                 className="nav-link active"

@@ -90,7 +90,7 @@ router.post("/register", (req, res) => {
 //   }
 // });
 // login route
-router.post("/signin", async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -102,7 +102,7 @@ router.post("/signin", async (req, res) => {
     if (userLogin) {
       const isMatch = await bcrypt.compare(password, userLogin.password);
 
-      const token = await userLogin.generateToken();
+      const token = await userLogin.generateAuthToken();
       console.log(token);
 
       res.cookie("jwtoken", token, {
@@ -115,7 +115,7 @@ router.post("/signin", async (req, res) => {
       if (isMatch) {
         res.json({
           message: "User signin successful",
-          token: await userLogin.generateToken(),
+          token: await userLogin.generateAuthToken(),
           userId: userLogin._id.toString(),
         });
       } else {

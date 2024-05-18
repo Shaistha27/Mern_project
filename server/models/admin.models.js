@@ -1,7 +1,10 @@
 // Admin model
+const express = require("express");
+const router = express.Router();
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const authenticate = require("../middleware/authenticate");
 
 const AdminSchema = new mongoose.Schema({
   name: {
@@ -44,6 +47,14 @@ AdminSchema.methods.generateAuthToken = async function () {
     console.error(err);
   }
 };
+router.get("/profile", authenticate, (req, res) => {
+  // console.log("About");
+  res.send(req.rootUser);
+});
 
+router.get("/getData", authenticate, (req, res) => {
+  res.json(req.rootUser);
+  // console.log(req.rootUser.name);
+});
 const Admin = mongoose.model("Admin", AdminSchema);
 module.exports = Admin;
